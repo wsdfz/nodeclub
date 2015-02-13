@@ -3,7 +3,6 @@ var User = require('../proxy').User;
 var Topic = require('../proxy').Topic;
 var Reply = require('../proxy').Reply;
 var TopicCollect = require('../proxy').TopicCollect;
-var utility = require('utility');
 var util = require('util');
 var TopicModel = require('../models').Topic;
 var ReplyModel = require('../models').Reply;
@@ -15,6 +14,7 @@ var validator = require('validator');
 var utility = require('utility');
 var _ = require('lodash');
 var qrcode = require('yaqrcode');
+var uuid = require('node-uuid');
 
 exports.index = function (req, res, next) {
   var user_name = req.params.name;
@@ -45,7 +45,7 @@ exports.index = function (req, res, next) {
         recent_topics: recent_topics,
         recent_replies: recent_replies,
         token: token,
-        pageTitle: util.format('@%s 的个人主页', user.loginname),
+        pageTitle: util.format('@%s 的个人主页', user.loginname)
       });
     };
 
@@ -90,6 +90,9 @@ exports.showSetting = function (req, res, next) {
       user.success = '保存成功。';
     }
     user.error = null;
+    if (!user.accessToken) {
+      user.accessToken = uuid.v4();
+    }
     user.accessTokenBase64 = qrcode(user.accessToken);
     return res.render('user/setting', user);
   });
@@ -102,6 +105,10 @@ exports.setting = function (req, res, next) {
   // 显示出错或成功信息
   function showMessage(msg, data, isSuccess) {
     data = data || req.body;
+    if (!data.accessToken) {
+      data.accessToken = uuid.v4();
+    }
+
     var data2 = {
       loginname: data.loginname,
       email: data.email,
@@ -110,7 +117,7 @@ exports.setting = function (req, res, next) {
       signature: data.signature,
       weibo: data.weibo,
       accessToken: data.accessToken,
-      accessTokenBase64: qrcode(data.accessToken),
+      accessTokenBase64: qrcode(data.accessToken)
     };
     if (isSuccess) {
       data2.success = msg;
@@ -161,6 +168,10 @@ exports.setting = function (req, res, next) {
 
         tools.bhash(new_pass, ep.done(function (passhash) {
           user.pass = passhash;
+          if (!user.accessToken) {
+            user.accessToken = uuid.v4();
+          }
+
           user.save(function (err) {
             if (err) {
               return next(err);
@@ -246,7 +257,7 @@ exports.top100 = function (req, res, next) {
     }
     res.render('user/top100', {
       users: tops,
-      pageTitle: 'top100',
+      pageTitle: 'top100'
     });
   });
 };

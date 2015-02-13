@@ -1,5 +1,5 @@
-
-var bcrypt = require('bcrypt');
+var utility = require('utility');
+var bcrypt = require('bcrypt-nodejs');
 var moment = require('moment');
 moment.locale('zh-cn'); // 使用中文
 
@@ -20,9 +20,14 @@ exports.validateId = function (str) {
 };
 
 exports.bhash = function (str, callback) {
-  bcrypt.hash(str, 10, callback);
+  bcrypt.hash(str, null, null, callback);
 };
 
 exports.bcompare = function (str, hash, callback) {
-  bcrypt.compare(str, hash, callback);
+  str_md5 = utility.md5(str);
+  if (str_md5 == hash) {
+    callback(null, true);
+  } else {
+    bcrypt.compare(str, hash, callback);
+  }
 };

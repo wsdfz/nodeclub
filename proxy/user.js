@@ -101,8 +101,9 @@ exports.newAndSave = function (name, loginname, pass, email, avatar_url, active,
   user.avatar = avatar_url;
   user.active = active || false;
   user.accessToken = uuid.v4();
-  user.save(callback);
-};
+  user.save(function (err) {
+    callback(err, user);
+  });};
 
 var makeGravatar = function (email) {
   return 'http://www.gravatar.com/avatar/' + utility.md5(email.toLowerCase()) + '?size=48';

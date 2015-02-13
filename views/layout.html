@@ -75,7 +75,7 @@
         <%}%>
       </a>
 
-      <form id='search_form' class='navbar-search' action="/search">
+      <form id='search_form' class='navbar-search' action="/">
         <input type='text' id='q' name='q' class='search-query span3' value=''/>
       </form>
       <ul class='nav pull-right'>
@@ -90,8 +90,8 @@
             </a>
         </li>
         <% } %>
-        <li><a href='/getstart'>新手入门</a></li>
-        <li><a href='/api'>API</a></li>
+        <!--li><a href='/getstart'>新手入门</a></li>
+        <li><a href='/api'>API</a></li-->
         <%
         var site_navs = config.site_navs || [];
         for (var i = 0, l = site_navs.length; i < l; i++) {
@@ -109,11 +109,6 @@
         <li><a href='/signin'>登录</a></li>
         <% } %>
       </ul>
-      <a class="btn btn-navbar" id="responsive-sidebar-trigger">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
     </div>
   </div>
 </div>
@@ -124,16 +119,12 @@
 <div id='footer'>
   <div id='footer_main'>
     <div class="links">
-      <a class='dark' href='/rss'>RSS</a>
-      |
-      <a class='dark' href='https://github.com/cnodejs/nodeclub/'>源码地址</a>
+      <a class='dark' href='https://github.com/cnodejs/nodeclub/' target="_blank"><strong>Source From Github</strong></a>
     </div>
 
-    <%- partial('./_sponsors') %>
 
   </div>
 </div>
-<div id="sidebar-mask"></div>
 
 <% if (config.google_tracker_id) { %>
 <script>

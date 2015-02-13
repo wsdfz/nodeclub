@@ -17,15 +17,22 @@
         <a href='/signin'>登录</a>
         或
         <a href='/signup'>注册</a>
-        , 也可以
-        <a href="/auth/github">
-          <span class="span-info">
-            通过 GitHub 登录
-          </span>
-        </a>
       </div>
     </div>
     <% } %>
+  </div>
+  <div class=panel>
+    <div class='header'>
+      <!-- <img src='<%- config.site_static_host %>/public/images/tag_icon&16.png' title='标签'/> -->
+      <span class="index_notify">工具链接</span>
+    </div>
+    <div class='inner'>
+      <div><a href="http://10.86.9.222:8080" target="_blank">Jenkins</a></div>
+      <div><a href="http://gitlab-beijing.irdeto.intra/" target="_blank">Git Lab in Beijing</a></div>
+      <div><a href="http://10.86.17.104/xwiki" target="_blank">IMS WIKI</a></div>
+      <hr />
+      <div><a href="http://10.86.17.121/SendSoaps" target="_blank">KMS Tools</a></div>
+    </div>
   </div>
 
   <% if (typeof(current_user) !== 'undefined') { %>
@@ -78,7 +85,7 @@
   </div>
   <% } %>
 
-  <div class='panel'>
+  <!--div class='panel'>
     <div class='header'>
       <span class='col_fade'>友情社区</span>
     </div>
@@ -103,16 +110,6 @@
         </li>
       </ol>
     </div>
-  </div>
-  <div class='panel'>
-    <div class='header'>
-      <span class='col_fade'>客户端二维码</span>
-    </div>
-    <div class='inner cnode-app-download'>
-      <img width='200' src="//dn-cnode.qbox.me/FtG0YVgQ6iginiLpf9W4_ShjiLfU">
-      <br />
-      <a href="https://itunes.apple.com/cn/app/id954734793" target="_blank">iOS</a>/<a href="http://fir.im/ks4u" target="_blank">Android</a>
-    </div>
-  </div>
+  </div-->
 
 </div>

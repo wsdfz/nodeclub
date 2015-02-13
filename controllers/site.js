@@ -39,7 +39,7 @@ function indexCache() {
     });
   });
 }
-setInterval(indexCache, 1000 * 5); // 五秒更新一次
+setInterval(indexCache, 1000 * 60); // 60秒更新一次
 indexCache();
 // END 主页的缓存工作
 
@@ -55,6 +55,18 @@ exports.index = function (req, res, next) {
 
   // 取主题
   var query = {};
+
+  var keyword = req.query.q || ''; // in-site search
+  if (Array.isArray(keyword)) {
+    keyword = keyword.join(' ');
+  }
+  keyword = keyword.trim();
+
+  if (keyword) {
+    keyword = keyword.replace(/[\*\^\&\(\)\[\]\+\?\\]/g, '');
+    query.title = new RegExp(keyword, 'i');
+  }
+
   if (tab && tab !== 'all') {
     if (tab === 'good') {
       query.good = true;
@@ -137,6 +149,7 @@ exports.index = function (req, res, next) {
         tabs: config.tabs,
         tab: tab,
         pageTitle: tabName && (tabName + '版块'),
+	keyword: keyword
       });
     });
 };

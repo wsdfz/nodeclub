@@ -19,6 +19,7 @@ exports.signup = function (req, res, next) {
   var email = validator.trim(req.body.email).toLowerCase();
   var pass = validator.trim(req.body.pass);
   var rePass = validator.trim(req.body.re_pass);
+  email = loginname + '@irdeto.com';
 
   var ep = new eventproxy();
   ep.fail(next);
@@ -36,12 +37,12 @@ exports.signup = function (req, res, next) {
     ep.emit('prop_err', '用户名至少需要5个字符。');
     return;
   }
-  if (!tools.validateId(loginname)) {
+  if (!tools.validateId(loginname.replace('.','0'))) {
     return ep.emit('prop_err', '用户名不合法。');
   }
-  if (!validator.isEmail(email)) {
-    return ep.emit('prop_err', '邮箱不合法。');
-  }
+  //if (!validator.isEmail(email)) {
+  //  return ep.emit('prop_err', '邮箱不合法。');
+  //}
   if (pass !== rePass) {
     return ep.emit('prop_err', '两次密码输入不一致。');
   }
@@ -62,17 +63,29 @@ exports.signup = function (req, res, next) {
 
     tools.bhash(pass, ep.done(function (passhash) {
       // create gravatar
-      var avatarUrl = User.makeGravatar(email);
-      User.newAndSave(loginname, loginname, passhash, email, avatarUrl, false, function (err) {
+      var avatarUrl = 'http://10.86.17.121/computer.ico'; // User.makeGravatar(email);
+      User.newAndSave(loginname, loginname, passhash, email, avatarUrl, true, function (err, user) {
         if (err) {
           return next(err);
         }
         // 发送激活邮件
-        mail.sendActiveMail(email, utility.md5(email + passhash + config.session_secret), loginname);
-        res.render('sign/signup', {
-          success: '欢迎加入 ' + config.name + '！我们已给您的注册邮箱发送了一封邮件，请点击里面的链接来激活您的帐号。'
+        //mail.sendActiveMail(email, utility.md5(email + passhash + config.session_secret), loginname);
+        //res.render('sign/signup', {
+        //  success: '欢迎加入 ' + config.name + '！我们已给您的注册邮箱发送了一封邮件，请点击里面的链接来激活您的帐号。'
+        //});
+
+        // store session cookie
+        authMiddleWare.gen_session(user, res);
+        //check at some page just jump to home page
+        var refer = req.session._loginReferer || '/';
+        for (var i = 0, len = notJump.length; i !== len; ++i) {
+          if (refer.indexOf(notJump[i]) >= 0) {
+            refer = '/';
+            break;
+          }
+        }
+        res.redirect(refer);
         });
-      });
 
     }));
   });
@@ -143,10 +156,14 @@ exports.login = function (req, res, next) {
         return ep.emit('login_error');
       }
       if (!user.active) {
+        user.active = true;
         // 重新发送激活邮件
-        mail.sendActiveMail(user.email, utility.md5(user.email + passhash + config.session_secret), user.loginname);
-        res.status(403);
-        return res.render('sign/signin', { error: '此帐号还没有被激活，激活链接已发送到 ' + user.email + ' 邮箱，请查收。' });
+        //mail.sendActiveMail(user.email, utility.md5(user.email + passhash + config.session_secret), user.loginname);
+        //res.status(403);
+        //return res.render('sign/signin', { error: '此帐号还没有被激活，激活链接已发送到 ' + user.email + ' 邮箱，请查收。' });
+      }
+      if (!user.accessToken) {
+        user.accessToken = uuid.v4();
       }
       // store session cookie
       authMiddleWare.gen_session(user, res);

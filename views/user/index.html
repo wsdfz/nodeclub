@@ -163,7 +163,7 @@
     $('#delete_all').click(function () {
       var $me = $(this);
       var params = {
-        _csrf: '<%- csrf %>',
+        _csrf: '<%- csrf %>'
       };
       if (!confirm('确定要删除吗？此操作不可逆')) {
         return;

@@ -396,7 +396,7 @@
           $repliesHistory.css('left', offset.left-mainOffset.left+width+10); // magic number
           $repliesHistory.css('top', offset.top-mainOffset.top-10); // magic number
           $repliesHistory.css({
-            'z-index': 1,
+            'z-index': 1
           });
           $repliesHistoryContent.empty();
           var chats = [];
@@ -408,7 +408,7 @@
               chats.push([
                 $($replyItem.find('.user_avatar').html()).attr({
                   height: '30px',
-                  width: '30px',
+                  width: '30px'
                 }), // avatar
                 (replyContent.length>300?replyContent.substr(0,300)+'...':replyContent), // reply content
                 '<a href="#'+replyToId+'" class="scroll_to_original" title="查看原文">↑</a>'
@@ -446,7 +446,7 @@
     var replyId = $this.closest('.reply_area').attr('reply_id');
     $.ajax({
       url: '/reply/' + replyId + '/up',
-      method: 'POST',
+      method: 'POST'
     }).done(function (data) {
       if (data.success) {
         $this.removeClass('invisible');
